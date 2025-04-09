@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WpfApp1\obj\Debug\
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WpfApp1\obj\Release\
 WpfApp1
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WpfApp1\App.xaml
 2-296045833
 
@@ -16,5 +16,5 @@ C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WpfApp1\App.xaml
 13-1310406943
 MainWindow.xaml;SignUp.xaml;
 
-False
+True
 
