@@ -14,7 +14,7 @@
         BorderBrush="Gray" 
         BorderThickness="0"
         Height="35" 
-        Margin="230,0,70,10" 
+        Margin="230,0,25,10" 
         VerticalAlignment="Bottom" 
         HorizontalAlignment="Stretch">
             <Grid >

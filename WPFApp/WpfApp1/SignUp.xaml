@@ -37,7 +37,7 @@
                     BorderThickness="0"
                     Height="35"
                     Margin="60,0,60,0">
-                <TextBox TextWrapping="Wrap"
+                <TextBox x:Name="userName" 
                          Foreground="White"
                          Background="Transparent"
                          BorderThickness="0"
@@ -59,7 +59,7 @@
                     BorderThickness="0"
                     Height="35"
                     Margin="60,0,60,0">
-                <TextBox TextWrapping="Wrap"
+                <PasswordBox x:Name="passWord" 
                          Foreground="White"
                          Background="Transparent"
                          BorderThickness="0"
@@ -74,12 +74,13 @@
                 Height="35"
                 Margin="150,60,150,0"
                 Grid.Row="3">
-            <Button Background="Transparent" 
+            <Button x:Name="sendForm"
+				    Background="Transparent" 
                     Content="Invia" 
                     FontSize="20" 
                     FontWeight="Bold" 
                     Foreground="White"
-                    BorderThickness="0"/>
+                    BorderThickness="0" Click="sendForm_Click"/>
         </Border>
     </Grid>
 </Window>
