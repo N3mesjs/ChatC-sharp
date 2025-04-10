@@ -1,0 +1,15 @@
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Debug\net8.0\ServerTCP.exe
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Debug\net8.0\ServerTCP.deps.json
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Debug\net8.0\ServerTCP.runtimeconfig.json
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Debug\net8.0\ServerTCP.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Debug\net8.0\ServerTCP.pdb
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ServerTCP.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ServerTCP.AssemblyInfoInputs.cache
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ServerTCP.AssemblyInfo.cs
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ServerTCP.csproj.CoreCompileInputs.cache
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ServerTCP.sourcelink.json
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ServerTCP.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\refint\ServerTCP.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ServerTCP.pdb
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ServerTCP.genruntimeconfig.cache
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Debug\net8.0\ref\ServerTCP.dll

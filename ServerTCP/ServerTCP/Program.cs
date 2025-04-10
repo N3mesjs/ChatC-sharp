@@ -7,45 +7,30 @@ namespace ServerTCP
 {
     public class TCPServer
     {
-        public static void Main(string[] args)
+        public static async void Main(string[] args)
         {
             var ipEndPoint = new IPEndPoint(IPAddress.Any, 13);
-            TcpListener listener = new TcpListener(ipEndPoint);
+            TcpListener listener = new(ipEndPoint);
 
             try
             {
                 listener.Start();
-                Console.WriteLine("Server started. Waiting for a connection...");
+                Console.WriteLine($"Server started on {ipEndPoint.Address}:{ipEndPoint.Port}");
 
-                while (true)
-                {
-                    // Accetta una connessione in modo sincrono
-                    using (TcpClient client = listener.AcceptTcpClient())
-                    {
-                        Console.WriteLine("Client connected.");
+                using TcpClient handler = await listener.AcceptTcpClientAsync();
+                await using NetworkStream stream = handler.GetStream();
 
-                        // Ottieni il NetworkStream per comunicare con il client
-                        using (NetworkStream stream = client.GetStream())
-                        {
-                            // Prepara il messaggio da inviare
-                            var message = $"📅 {DateTime.Now} 🕛";
-                            var dateTimeBytes = Encoding.UTF8.GetBytes(message);
+                var message = $"📅 {DateTime.Now} 🕛";
+                var dateTimeBytes = Encoding.UTF8.GetBytes(message);
+                await stream.WriteAsync(dateTimeBytes);
 
-                            // Invia il messaggio al client
-                            stream.Write(dateTimeBytes, 0, dateTimeBytes.Length);
-                            Console.WriteLine($"Sent message: \"{message}\"");
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Sent message: \"{message}\"");
+                // Sample output:
+                //     Sent message: "📅 8/22/2022 9:07:17 AM 🕛"
             }
             finally
             {
                 listener.Stop();
-                Console.WriteLine("Server stopped.");
             }
         }
     }
