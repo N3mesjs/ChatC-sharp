@@ -80,7 +80,7 @@
                     FontSize="20" 
                     FontWeight="Bold" 
                     Foreground="White"
-                    BorderThickness="0" Click="sendForm_Click"/>
+                    BorderThickness="0" Click="SendForm_Click"/>
         </Border>
     </Grid>
 </Window>

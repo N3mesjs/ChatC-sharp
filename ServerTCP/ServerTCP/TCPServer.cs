@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ServerTCP
 {
-    public class TCPServer
+    class TCPServer
     {
-        public static async void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var ipEndPoint = new IPEndPoint(IPAddress.Any, 13);
             TcpListener listener = new(ipEndPoint);
@@ -20,13 +21,19 @@ namespace ServerTCP
                 using TcpClient handler = await listener.AcceptTcpClientAsync();
                 await using NetworkStream stream = handler.GetStream();
 
-                var message = $"📅 {DateTime.Now} 🕛";
+                // Legge il messaggio inviato dal client
+                byte[] buffer = new byte[1024];
+                int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                string clientMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                Console.WriteLine($"Received message from client: \"{clientMessage}\"");
+
+                // Invia la risposta al client
+                var message = $"?? {DateTime.Now} ??";
                 var dateTimeBytes = Encoding.UTF8.GetBytes(message);
                 await stream.WriteAsync(dateTimeBytes);
 
                 Console.WriteLine($"Sent message: \"{message}\"");
-                // Sample output:
-                //     Sent message: "📅 8/22/2022 9:07:17 AM 🕛"
             }
             finally
             {
