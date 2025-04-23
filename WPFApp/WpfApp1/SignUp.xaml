@@ -82,5 +82,6 @@
                     Foreground="White"
                     BorderThickness="0" Click="SendForm_Click"/>
         </Border>
+        <TextBlock HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="Center" x:Name="ResultText"/>
     </Grid>
 </Window>

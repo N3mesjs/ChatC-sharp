@@ -3,12 +3,10 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Windows;
+using System.Numerics;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Interaction logic for SignUp.xaml
-    /// </summary>
     public partial class SignUp : Window
     {
         private string _username;
@@ -21,43 +19,54 @@ namespace WpfApp1
 
         private async void SendForm_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Metodo sendForm_Click chiamato!");
             _username = userName.Text;
             _password = passWord.Password;
 
             try
             {
-                // Specifica l'indirizzo IP e la porta del server
-                var ipAddress = IPAddress.Parse("127.0.0.1"); // Cambia con l'indirizzo del server
-                var port = 13; // Cambia con la porta del server
-
                 TcpClient client = new TcpClient();
-                await client.ConnectAsync(ipAddress, port);
+                await client.ConnectAsync("127.0.0.1", 13);
 
                 using (NetworkStream stream = client.GetStream())
                 {
+                    // Riceve la chiave pubblica RSA dal server
+                    byte[] publicKeyBytes = new byte[1024];
+                    int bytesRead = await stream.ReadAsync(publicKeyBytes, 0, publicKeyBytes.Length);
+                    string publicKeyString = Encoding.UTF8.GetString(publicKeyBytes, 0, bytesRead);
+                    var publicKeyParts = publicKeyString.Split(',');
+                    BigInteger publicKey = BigInteger.Parse(publicKeyParts[0]);
+                    BigInteger modulus = BigInteger.Parse(publicKeyParts[1]);
+
                     // Prepara il messaggio da inviare
                     string messageToSend = $"Username: {_username}, Password: {_password}";
-                    byte[] dataToSend = Encoding.UTF8.GetBytes(messageToSend);
+                    BigInteger message = new BigInteger(Encoding.UTF8.GetBytes(messageToSend));
 
-                    // Invia il messaggio
-                    await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+                    // Crittografa il messaggio con RSA
+                    BigInteger encryptedMessage = RSA.Encrypt(message, publicKey, modulus);
+                    byte[] encryptedMessageBytes = encryptedMessage.ToByteArray();
 
-                    // Ricevi la risposta dal server
-                    var buffer = new byte[1024];
-                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    string serverResponse = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    // Invia il messaggio crittografato
+                    await stream.WriteAsync(encryptedMessageBytes, 0, encryptedMessageBytes.Length);
 
-                    // Mostra la risposta del server
+                    // Riceve la risposta crittografata dal server
+                    byte[] responseBuffer = new byte[1024];
+                    bytesRead = await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length);
+                    byte[] trimmedResponseBuffer = new byte[bytesRead];
+                    Array.Copy(responseBuffer, trimmedResponseBuffer, bytesRead);
+                    BigInteger encryptedResponse = new BigInteger(trimmedResponseBuffer);
+
+
+                    // Decifra la risposta
+                    BigInteger decryptedResponse = RSA.Decrypt(encryptedResponse, publicKey, modulus);
+                    string serverResponse = Encoding.UTF8.GetString(decryptedResponse.ToByteArray());
+
                     MessageBox.Show($"Risposta dal server: {serverResponse}", "Risposta", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                // Gestione degli errori
                 MessageBox.Show($"Errore: {ex.Message}", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
     }
 }
