@@ -93,7 +93,7 @@ namespace WpfApp1
                         if (serverResponse.Split(' ')[0] == "SUCCESS")
                         {
                             this.Hide();
-                            MainWindow mainWindow = new MainWindow();
+                            MainWindow mainWindow = new MainWindow(_username);
                             mainWindow.Show();
                         } else
                         {

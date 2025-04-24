@@ -2,36 +2,77 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
-using System.Runtime.Remoting.Messaging;
 using System.Windows.Input;
+using Firebase.Database;
+using Firebase.Database.Query;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Logica di interazione per MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public ObservableCollection<Message> Messages;
-        public MainWindow()
+        private string _username;
+        private FirebaseClient _firebaseClient;
+
+        public MainWindow(string username)
         {
             InitializeComponent();
+
+            // Inizializza Firebase
+            _firebaseClient = new FirebaseClient("https://choco-d86c6-default-rtdb.europe-west1.firebasedatabase.app");
+
             // Inizializza la lista dei messaggi
+            _username = username;
             Messages = new ObservableCollection<Message>();
             MessagesContainer.ItemsSource = Messages;
 
-            // Aggiungi un messaggio di esempio
-            Messages.Add(new Message("Alice", "Ciao, come stai?"));
-            Messages.Add(new Message("Bob", "Tutto bene, grazie!"));
+            // Carica i messaggi dal database
+            LoadMessagesFromDatabase();
         }
 
-        private void AddMessage(string author, string body)
+        private async void LoadMessagesFromDatabase()
         {
-            Messages.Add(new Message(author, body));
+            try
+            {
+                var messages = await _firebaseClient
+                    .Child("messages")
+                    .OrderByKey()
+                    .OnceAsync<Message>();
 
-            MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
+                foreach (var message in messages)
+                {
+                    Messages.Add(new Message(message.Object.Author, message.Object.Body));
+                }
+
+                MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Errore durante il caricamento dei messaggi: {ex.Message}", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
+        private async void AddMessage(string author, string body)
+        {
+            try
+            {
+                // Aggiungi il messaggio alla lista
+                Messages.Add(new Message(author, body));
+
+                // Salva il messaggio nel database
+                await _firebaseClient
+                    .Child("messages")
+                    .PostAsync(new Message(author, body));
+
+                MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Errore durante il salvataggio del messaggio: {ex.Message}", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -42,10 +83,10 @@ namespace WpfApp1
         {
             if (e.Key == Key.Enter && !string.IsNullOrWhiteSpace(ChatTextBox.Text))
             {
-                AddMessage("You", ChatTextBox.Text);
+                AddMessage(_username, ChatTextBox.Text);
                 ChatTextBox.Clear();
             }
         }
-
     }
 }
+

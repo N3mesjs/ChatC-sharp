@@ -20,7 +20,7 @@ namespace ServerTCP
             // Inizializza Firebase Admin SDK
             FirebaseApp.Create(new AppOptions
             {
-                Credential = GoogleCredential.FromFile("")
+                Credential = GoogleCredential.FromFile("C:\\Users\\Nymes\\Documents\\GitHub\\ChatC-sharp\\ServerTCP\\ServerTCP\\choco-d86c6-firebase-adminsdk-282m1-b544bb3dee.json")
             });
 
             var ipEndPoint = new IPEndPoint(IPAddress.Any, 13);
@@ -117,7 +117,7 @@ namespace ServerTCP
                 Console.WriteLine($"Tipo: {type}, Username: {username}, Password: {password}");
 
                 // Inizializza Firebase client
-                var firebaseClient = new FirebaseClient("");
+                var firebaseClient = new FirebaseClient("https://choco-d86c6-default-rtdb.europe-west1.firebasedatabase.app");
                 string response = "";
 
                 // Salva i dati nel database Firebase
