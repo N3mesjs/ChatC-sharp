@@ -16,19 +16,12 @@ namespace WpfApp1
         {
             Random random = new Random();
             BigInteger prime;
-            int attempts = 0;
-
-            Console.WriteLine($"Inizio generazione numero primo di {bitLength} bit...");
 
             do
             {
-                attempts++;
-                Console.WriteLine($"Tentativo {attempts} per trovare un numero primo di {bitLength} bit.");
                 prime = GenerateRandomBigInteger(bitLength, random);
-                Console.WriteLine($"  Candidato primo generato: {prime}");
             } while (!IsProbablyPrime(prime));
 
-            Console.WriteLine($"Numero primo di {bitLength} bit trovato dopo {attempts} tentativi: {prime}");
             return prime;
         }
 
@@ -48,8 +41,6 @@ namespace WpfApp1
 
         private static bool IsProbablyPrime(BigInteger n, int k = 10)
         {
-            Console.WriteLine($"  Esecuzione test di primalità Miller-Rabin per: {n}");
-
             if (n < 2) return false;
             if (n == 2 || n == 3) return true;
             if (n % 2 == 0) return false;
@@ -67,12 +58,10 @@ namespace WpfApp1
             for (int i = 0; i < k; i++)
             {
                 BigInteger a = GenerateRandomBigIntegerInRange(2, n - 2, random);
-                Console.WriteLine($"    Miller-Rabin: Test con base a = {a}, iterazione {i + 1}/{k}");
                 BigInteger x = BigInteger.ModPow(a, d, n);
 
                 if (x == 1 || x == n - 1)
                 {
-                    Console.WriteLine($"    Miller-Rabin: Test con base {a} superato (x = 1 o x = n-1).");
                     continue;
                 }
 
@@ -80,23 +69,19 @@ namespace WpfApp1
                 for (int r = 0; r < s - 1; r++)
                 {
                     x = BigInteger.ModPow(x, 2, n);
-                    Console.WriteLine($"      Miller-Rabin: Test intermedio con x = {x}");
                     if (x == n - 1)
                     {
                         isComposite = false;
-                        Console.WriteLine($"      Miller-Rabin: Test intermedio superato (x = n-1).");
                         break;
                     }
                 }
 
                 if (isComposite)
                 {
-                    Console.WriteLine($"  {n} non è probabilmente primo (fallito test con base {a}).");
                     return false;
                 }
             }
 
-            Console.WriteLine($"  {n} è probabilmente primo (superati tutti i test).");
             return true;
         }
 
@@ -111,11 +96,9 @@ namespace WpfApp1
 
             byte[] bytes = new byte[byteLength];
             BigInteger randomValue;
-            int attempts = 0;
 
             do
             {
-                attempts++;
                 random.NextBytes(bytes);
                 randomValue = new BigInteger(bytes);
 
@@ -131,8 +114,7 @@ namespace WpfApp1
 
             } while (min + randomValue > max);
 
-            BigInteger result = min + randomValue;
-            return result;
+            return min + randomValue;
         }
 
         private static BigInteger Gcd(BigInteger a, BigInteger b)
@@ -166,14 +148,12 @@ namespace WpfApp1
 
         public static RsaKeyPair GenerateKeys(int bitLength = 512)
         {
-            Console.WriteLine("Generating RSA keys...");
             BigInteger p = GeneratePrime(bitLength / 2);
             BigInteger q;
             do
             {
                 q = GeneratePrime(bitLength / 2);
             } while (q == p);
-
 
             BigInteger n = p * q;
             BigInteger phi = (p - 1) * (q - 1);
@@ -185,8 +165,6 @@ namespace WpfApp1
             }
 
             BigInteger d = ModInverse(e, phi);
-
-            Console.WriteLine("RSA keys generated successfully.");
 
             return new RsaKeyPair
             {
@@ -204,6 +182,43 @@ namespace WpfApp1
         public static BigInteger Decrypt(BigInteger cipherText, BigInteger privateKey, BigInteger modulus)
         {
             return BigInteger.ModPow(cipherText, privateKey, modulus);
+        }
+
+        public static byte[] EncryptWithRSA(byte[] data, BigInteger publicKey, BigInteger modulus)
+        {
+            // Check data size
+            int maxBytes = (int)(modulus.ToByteArray().Length - 11); // Allow space for PKCS#1 padding
+            if (data.Length > maxBytes)
+            {
+                throw new ArgumentException($"Data too large for RSA encryption with this key. Max {maxBytes} bytes.");
+            }
+
+            // Add simple padding to ensure message integrity
+            byte[] paddedData = new byte[data.Length + 1];
+            Array.Copy(data, 0, paddedData, 0, data.Length);
+            paddedData[data.Length] = 0; // Add zero byte to ensure positive BigInteger
+
+            BigInteger dataBigInt = new BigInteger(paddedData);
+            BigInteger encryptedBigInt = Encrypt(dataBigInt, publicKey, modulus);
+
+            return encryptedBigInt.ToByteArray();
+        }
+
+        public static byte[] DecryptWithRSA(byte[] data, BigInteger privateKey, BigInteger modulus)
+        {
+            BigInteger dataBigInt = new BigInteger(data);
+            BigInteger decryptedBigInt = Decrypt(dataBigInt, privateKey, modulus);
+
+            byte[] result = decryptedBigInt.ToByteArray();
+
+            // Remove padding (last byte should be zero)
+            int paddingIndex = result.Length - 1;
+            if (paddingIndex >= 0 && result[paddingIndex] == 0)
+            {
+                Array.Resize(ref result, paddingIndex);
+            }
+
+            return result;
         }
     }
 }

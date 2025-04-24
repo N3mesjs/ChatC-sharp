@@ -16,14 +16,14 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
-        // Inizializza la lista dei messaggi
-        Messages = new ObservableCollection<Message>();
-        MessagesContainer.ItemsSource = Messages;
+            // Inizializza la lista dei messaggi
+            Messages = new ObservableCollection<Message>();
+            MessagesContainer.ItemsSource = Messages;
 
-        // Aggiungi un messaggio di esempio
-        Messages.Add(new Message("Alice", "Ciao, come stai?"));
-        Messages.Add(new Message("Bob", "Tutto bene, grazie!"));
-    }
+            // Aggiungi un messaggio di esempio
+            Messages.Add(new Message("Alice", "Ciao, come stai?"));
+            Messages.Add(new Message("Bob", "Tutto bene, grazie!"));
+        }
 
         private void AddMessage(string author, string body)
         {

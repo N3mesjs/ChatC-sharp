@@ -9,4 +9,10 @@
 		<!-- Specifica il punto di ingresso -->
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="FirebaseAdmin" Version="3.1.0" />
+	  <PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
 </Project>

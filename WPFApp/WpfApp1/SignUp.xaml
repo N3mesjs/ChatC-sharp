@@ -10,6 +10,7 @@
             <!-- Per il primo campo -->
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <!-- Per il secondo campo -->
             <RowDefinition Height="*"/>
             <!-- Spazio rimanente -->
@@ -47,7 +48,7 @@
         </StackPanel>
 
         <!-- Campo Password -->
-        <StackPanel Grid.Row="2" Margin="0,20,0,0">
+        <StackPanel Grid.Row="2" Margin="0,10,0,0">
             <Label Content="Password" 
                    FontWeight="Bold" 
                    FontSize="16" 
@@ -72,7 +73,7 @@
                 BorderBrush="Transparent"
                 BorderThickness="0"
                 Height="35"
-                Margin="150,60,150,0"
+                Margin="150,10,150,0"
                 Grid.Row="3">
             <Button x:Name="sendForm"
 				    Background="Transparent" 
@@ -82,6 +83,15 @@
                     Foreground="White"
                     BorderThickness="0" Click="SendForm_Click"/>
         </Border>
-        <TextBlock HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="Center" x:Name="ResultText"/>
+        <Button x:Name="goToSignUp"
+                Background="Transparent" 
+                Content="Registrati" 
+                FontSize="15" 
+                FontWeight="Bold" 
+                Foreground="White"
+                BorderThickness="0" 
+                Click="GoToSignUp_Click"
+                Grid.Row="4"
+                Margin="0,10,0,0"/>
     </Grid>
 </Window>

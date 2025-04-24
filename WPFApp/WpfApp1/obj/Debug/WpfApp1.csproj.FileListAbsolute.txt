@@ -52,3 +52,5 @@ C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.csp
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.csproj.Up2Date
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.exe
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.pdb
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\LogIn.baml
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\LogIn.g.cs
