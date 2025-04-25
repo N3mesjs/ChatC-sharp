@@ -9,6 +9,14 @@ using System.Windows.Input;
 using System.IO;
 using System.Security.Cryptography;
 using System.Numerics;
+using System.Windows.Threading;
+using System.Linq;
+using System.Collections.Generic;
+
+/*
+ *  TODO: Add private chats
+ *  Also add moderation so admins have the ability to delete messages or warn users or ban them
+ */
 
 namespace WpfApp1
 {
@@ -26,15 +34,22 @@ namespace WpfApp1
             Messages = new ObservableCollection<Message>();
             MessagesContainer.ItemsSource = Messages;
 
-            // Carica i messaggi dal server
+            // Carica i messaggi iniziali dal server
             LoadMessagesFromServer();
+
+            // Configura il timer per il polling
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(2); // Esegui ogni 2 secondi
+            timer.Tick += (s, e) => LoadMessagesFromServer();
+            timer.Start();
         }
+
+        private HashSet<string> _messageTracker = new HashSet<string>(); // Tiene traccia dei messaggi univoci
 
         private async void LoadMessagesFromServer()
         {
             try
             {
-                Messages.Clear();
                 TcpClient client = new TcpClient();
                 await client.ConnectAsync("127.0.0.1", 13);
 
@@ -100,7 +115,15 @@ namespace WpfApp1
                         var messages = JsonConvert.DeserializeObject<Message[]>(jsonResponse);
                         foreach (var message in messages)
                         {
-                            Messages.Add(message);
+                            // Crea un identificatore unico per il messaggio
+                            string messageId = $"{message.Author}:{message.Body}";
+
+                            // Aggiungi il messaggio solo se non è già stato aggiunto
+                            if (!_messageTracker.Contains(messageId)) // TODO: provarlo
+                            {
+                                _messageTracker.Add(messageId);
+                                Messages.Add(message);
+                            }
                         }
 
                         MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
@@ -164,9 +187,7 @@ namespace WpfApp1
                         await stream.WriteAsync(encryptedMessage, 0, encryptedMessage.Length);
                     }
 
-                    // Aggiungi il messaggio alla lista
-                    Messages.Add(new Message(author, body));
-                    MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
+                    // Non aggiungere manualmente il messaggio qui
                 }
             }
             catch (Exception ex)
@@ -174,6 +195,7 @@ namespace WpfApp1
                 MessageBox.Show($"Errore durante l'invio del messaggio: {ex.Message}", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -190,4 +212,3 @@ namespace WpfApp1
         }
     }
 }
-
