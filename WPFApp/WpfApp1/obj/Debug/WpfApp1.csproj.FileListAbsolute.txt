@@ -33,7 +33,9 @@ C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WpfApp1\obj\Debug\WpfApp1.csproj.Cor
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WpfApp1\obj\Debug\WpfApp1.exe
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WpfApp1\obj\Debug\WpfApp1.pdb
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.csproj.AssemblyReference.cache
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\LogIn.baml
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\SignUp.baml
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\LogIn.g.cs
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\MainWindow.g.cs
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\SignUp.g.cs
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\App.g.cs
@@ -42,8 +44,20 @@ C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1_Mar
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\WpfApp1.exe.config
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\WpfApp1.exe
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\WpfApp1.pdb
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\Firebase.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\LiteDB.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\System.Reactive.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\Firebase.xml
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\LiteDB.xml
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\System.Reactive.xml
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\MainWindow.baml
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.g.resources
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.Properties.Resources.resources
@@ -52,5 +66,3 @@ C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.csp
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.csproj.Up2Date
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.exe
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\WpfApp1.pdb
-C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\LogIn.baml
-C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\obj\Debug\LogIn.g.cs

@@ -83,14 +83,14 @@
                     Foreground="White"
                     BorderThickness="0" Click="SendForm_Click"/>
         </Border>
-        <Button x:Name="goToSignUp"
+        <Button x:Name="goToLogIn"
                 Background="Transparent" 
-                Content="Registrati" 
+                Content="Accedi" 
                 FontSize="15" 
                 FontWeight="Bold" 
                 Foreground="White"
                 BorderThickness="0" 
-                Click="GoToSignUp_Click"
+                Click="GoToLogIn_Click"
                 Grid.Row="4"
                 Margin="0,10,0,0"/>
     </Grid>

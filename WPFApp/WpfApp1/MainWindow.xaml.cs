@@ -2,38 +2,178 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
-using System.Runtime.Remoting.Messaging;
+using System.Net.Sockets;
+using System.Text;
+using Newtonsoft.Json;
 using System.Windows.Input;
+using System.IO;
+using System.Security.Cryptography;
+using System.Numerics;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Logica di interazione per MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public ObservableCollection<Message> Messages;
         private string _username;
+
         public MainWindow(string username)
         {
             InitializeComponent();
+
             // Inizializza la lista dei messaggi
             _username = username;
             Messages = new ObservableCollection<Message>();
             MessagesContainer.ItemsSource = Messages;
 
-            // Aggiungi un messaggio di esempio
-            Messages.Add(new Message("Alice", "Ciao, come stai?"));
-            Messages.Add(new Message("Bob", "Tutto bene, grazie!"));
+            // Carica i messaggi dal server
+            LoadMessagesFromServer();
         }
 
-        private void AddMessage(string author, string body)
+        private async void LoadMessagesFromServer()
         {
-            Messages.Add(new Message(author, body));
+            try
+            {
+                Messages.Clear();
+                TcpClient client = new TcpClient();
+                await client.ConnectAsync("127.0.0.1", 13);
 
-            MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
+                using (NetworkStream stream = client.GetStream())
+                {
+                    // Riceve la chiave pubblica RSA dal server
+                    byte[] publicKeyBytes = new byte[1024];
+                    int bytesRead = await stream.ReadAsync(publicKeyBytes, 0, publicKeyBytes.Length);
+                    string publicKeyString = Encoding.UTF8.GetString(publicKeyBytes, 0, bytesRead);
+                    var publicKeyParts = publicKeyString.Split(',');
+                    BigInteger publicKey = BigInteger.Parse(publicKeyParts[0]);
+                    BigInteger modulus = BigInteger.Parse(publicKeyParts[1]);
+
+                    // Genera una chiave AES casuale
+                    using (Aes aes = Aes.Create())
+                    {
+                        aes.GenerateKey();
+                        aes.GenerateIV();
+
+                        // Invia la chiave AES crittografata con RSA
+                        byte[] aesKeyWithIV = new byte[aes.Key.Length + aes.IV.Length];
+                        Buffer.BlockCopy(aes.Key, 0, aesKeyWithIV, 0, aes.Key.Length);
+                        Buffer.BlockCopy(aes.IV, 0, aesKeyWithIV, aes.Key.Length, aes.IV.Length);
+
+                        byte[] encryptedAesKey = RSA.EncryptWithRSA(aesKeyWithIV, publicKey, modulus);
+                        await stream.WriteAsync(encryptedAesKey, 0, encryptedAesKey.Length);
+
+                        // Prepara la richiesta per ottenere i messaggi
+                        var request = new { Type = "messages" };
+                        string jsonRequest = JsonConvert.SerializeObject(request);
+
+                        // Crittografa la richiesta con AES
+                        byte[] encryptedRequest;
+                        using (MemoryStream msEncrypt = new MemoryStream())
+                        {
+                            using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                            using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                            {
+                                swEncrypt.Write(jsonRequest);
+                            }
+                            encryptedRequest = msEncrypt.ToArray();
+                        }
+
+                        // Invia la richiesta crittografata
+                        await stream.WriteAsync(encryptedRequest, 0, encryptedRequest.Length);
+
+                        // Riceve la risposta crittografata dal server
+                        byte[] responseBuffer = new byte[4096];
+                        bytesRead = await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length);
+                        byte[] trimmedResponseBuffer = new byte[bytesRead];
+                        Array.Copy(responseBuffer, trimmedResponseBuffer, bytesRead);
+
+                        // Decifra la risposta con AES
+                        string jsonResponse;
+                        using (MemoryStream msDecrypt = new MemoryStream(trimmedResponseBuffer))
+                        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            jsonResponse = srDecrypt.ReadToEnd();
+                        }
+
+                        // Deserializza i messaggi e aggiungili all'ObservableCollection
+                        var messages = JsonConvert.DeserializeObject<Message[]>(jsonResponse);
+                        foreach (var message in messages)
+                        {
+                            Messages.Add(message);
+                        }
+
+                        MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Errore durante il caricamento dei messaggi: {ex.Message}", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
+        private async void AddMessage(string author, string body)
+        {
+            try
+            {
+                TcpClient client = new TcpClient();
+                await client.ConnectAsync("127.0.0.1", 13);
+
+                using (NetworkStream stream = client.GetStream())
+                {
+                    // Riceve la chiave pubblica RSA dal server
+                    byte[] publicKeyBytes = new byte[1024];
+                    int bytesRead = await stream.ReadAsync(publicKeyBytes, 0, publicKeyBytes.Length);
+                    string publicKeyString = Encoding.UTF8.GetString(publicKeyBytes, 0, bytesRead);
+                    var publicKeyParts = publicKeyString.Split(',');
+                    BigInteger publicKey = BigInteger.Parse(publicKeyParts[0]);
+                    BigInteger modulus = BigInteger.Parse(publicKeyParts[1]);
+
+                    // Genera una chiave AES casuale
+                    using (Aes aes = Aes.Create())
+                    {
+                        aes.GenerateKey();
+                        aes.GenerateIV();
+
+                        // Invia la chiave AES crittografata con RSA
+                        byte[] aesKeyWithIV = new byte[aes.Key.Length + aes.IV.Length];
+                        Buffer.BlockCopy(aes.Key, 0, aesKeyWithIV, 0, aes.Key.Length);
+                        Buffer.BlockCopy(aes.IV, 0, aesKeyWithIV, aes.Key.Length, aes.IV.Length);
+
+                        byte[] encryptedAesKey = RSA.EncryptWithRSA(aesKeyWithIV, publicKey, modulus);
+                        await stream.WriteAsync(encryptedAesKey, 0, encryptedAesKey.Length);
+
+                        // Prepara il messaggio da inviare
+                        var message = new { Type = "AddMessage", Author = author, Body = body };
+                        string jsonMessage = JsonConvert.SerializeObject(message);
+
+                        // Crittografa il messaggio con AES
+                        byte[] encryptedMessage;
+                        using (MemoryStream msEncrypt = new MemoryStream())
+                        {
+                            using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                            using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                            {
+                                swEncrypt.Write(jsonMessage);
+                            }
+                            encryptedMessage = msEncrypt.ToArray();
+                        }
+
+                        // Invia il messaggio crittografato
+                        await stream.WriteAsync(encryptedMessage, 0, encryptedMessage.Length);
+                    }
+
+                    // Aggiungi il messaggio alla lista
+                    Messages.Add(new Message(author, body));
+                    MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Errore durante l'invio del messaggio: {ex.Message}", "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -44,10 +184,10 @@ namespace WpfApp1
         {
             if (e.Key == Key.Enter && !string.IsNullOrWhiteSpace(ChatTextBox.Text))
             {
-                AddMessage("You", ChatTextBox.Text);
+                AddMessage(_username, ChatTextBox.Text); // Usa _username come autore
                 ChatTextBox.Clear();
             }
         }
-
     }
 }
+

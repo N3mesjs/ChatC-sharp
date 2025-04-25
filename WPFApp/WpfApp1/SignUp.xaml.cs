@@ -22,10 +22,11 @@ namespace WpfApp1
 
         private async void SendForm_Click(object sender, RoutedEventArgs e)
         {
-            _username = userName.Text;
-            _password = passWord.Password;
             try
             {
+                _username = userName.Text;
+                _password = passWord.Password;
+
                 TcpClient client = new TcpClient();
                 await client.ConnectAsync("127.0.0.1", 13);
                 using (NetworkStream stream = client.GetStream())

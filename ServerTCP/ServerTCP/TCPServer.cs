@@ -10,6 +10,8 @@ using Google.Apis.Auth.OAuth2;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System.Security.Cryptography;
+using System.IO;
+using System.Linq;
 
 namespace ServerTCP
 {
@@ -20,7 +22,7 @@ namespace ServerTCP
             // Inizializza Firebase Admin SDK
             FirebaseApp.Create(new AppOptions
             {
-                Credential = GoogleCredential.FromFile("C:\\Users\\Nymes\\Documents\\GitHub\\ChatC-sharp\\ServerTCP\\ServerTCP\\choco-d86c6-firebase-adminsdk-282m1-b544bb3dee.json")
+                Credential = GoogleCredential.FromFile("C:\\Users\\Nymes\\Documents\\GitHub\\ChatC-sharp\\ServerTCP\\ServerTCP\\choco-d86c6-firebase-adminsdk-282m1-b544bb3dee.json") // Sostituisci con il percorso del tuo file JSON
             });
 
             var ipEndPoint = new IPEndPoint(IPAddress.Any, 13);
@@ -107,31 +109,53 @@ namespace ServerTCP
 
             Console.WriteLine($"Decrypted message from client: \"{clientMessage}\"");
 
-            // Deserializza il JSON per ottenere username e password
+            // Deserializza il JSON per ottenere il tipo di richiesta
             try
             {
-                var credentials = JsonConvert.DeserializeObject<dynamic>(clientMessage);
-                string type = credentials.Type;
-                string username = credentials.Username;
-                string password = credentials.Password;
-                Console.WriteLine($"Tipo: {type}, Username: {username}, Password: {password}");
+                var request = JsonConvert.DeserializeObject<dynamic>(clientMessage);
+                string type = request.Type;
 
                 // Inizializza Firebase client
                 var firebaseClient = new FirebaseClient("https://choco-d86c6-default-rtdb.europe-west1.firebasedatabase.app");
                 string response = "";
 
-                // Salva i dati nel database Firebase
-                if (type == "SignUp")
+                if (type == "messages")
                 {
+                    // Recupera i messaggi dal database
+                    var messages = await firebaseClient
+                        .Child("messages")
+                        .OrderByKey()
+                        .OnceAsync<Message>();
+
+                    // Serializza i messaggi in JSON
+                    var messageList = messages.Select(m => new Message(m.Object.Author, m.Object.Body)).ToArray();
+                    response = JsonConvert.SerializeObject(messageList);
+                }
+                else if (type == "AddMessage")
+                {
+                    string author = request.Author;
+                    string body = request.Body;
+
+                    // Salva il messaggio nel database
+                    await firebaseClient
+                        .Child("messages")
+                        .PostAsync(new Message(author, body));
+
+                    response = "SUCCESS: Messaggio salvato con successo.";
+                    Console.WriteLine($"Message from '{author}' saved: {body}");
+                }
+                else if (type == "SignUp")
+                {
+                    string username = request.Username;
+                    string password = request.Password;
+
                     // Verifica se l'username esiste già
                     bool usernameExists = false;
 
-                    // Ottieni tutti gli utenti dal database
                     var users = await firebaseClient
                         .Child("users")
                         .OnceAsync<dynamic>();
 
-                    // Controlla se esiste già un utente con lo stesso username
                     foreach (var user in users)
                     {
                         if (user.Object.Username == username)
@@ -148,27 +172,25 @@ namespace ServerTCP
                     }
                     else
                     {
-                        // Salva i dati nel database
                         await firebaseClient
                             .Child("users")
                             .PostAsync(new { Username = username, Password = password });
 
-                        //response = $"SUCCESS: Registrazione completata con successo! 📅 {DateTime.Now} 🕛";
                         response = "SUCCESS";
                         Console.WriteLine("User data saved to Firebase.");
                     }
                 }
-                else if (type == "Login")
+                else if (type == "LogIn")
                 {
-                    // Gestione login (puoi aggiungere questa parte se necessario)
+                    string username = request.Username;
+                    string password = request.Password;
+
                     bool loginSuccess = false;
 
-                    // Ottieni tutti gli utenti dal database
                     var users = await firebaseClient
                         .Child("users")
                         .OnceAsync<dynamic>();
 
-                    // Controlla se le credenziali sono corrette
                     foreach (var user in users)
                     {
                         if (user.Object.Username == username && user.Object.Password == password)
@@ -180,7 +202,6 @@ namespace ServerTCP
 
                     if (loginSuccess)
                     {
-                        //response = $"SUCCESS: Login effettuato con successo! 📅 {DateTime.Now} 🕛";
                         response = "SUCCESS";
                         Console.WriteLine($"User '{username}' logged in successfully.");
                     }
@@ -189,6 +210,10 @@ namespace ServerTCP
                         response = "ERROR: Username o password non validi.";
                         Console.WriteLine("Login failed: Invalid username or password.");
                     }
+                }
+                else
+                {
+                    response = "ERROR: Tipo di richiesta non supportato.";
                 }
 
                 // Invia una risposta cifrata al client con AES
@@ -215,36 +240,23 @@ namespace ServerTCP
             catch (JsonReaderException ex)
             {
                 Console.WriteLine($"JSON parsing error: {ex.Message}");
-                return;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error processing request: {ex.Message}");
-
-                // Invia una risposta di errore cifrata
-                string errorResponse = $"ERROR: Si è verificato un errore sul server. {ex.Message}";
-                byte[] encryptedErrorResponse;
-
-                using (Aes aes = Aes.Create())
-                {
-                    aes.Key = aesKey;
-                    aes.IV = aesIV;
-
-                    using (MemoryStream msEncrypt = new MemoryStream())
-                    {
-                        using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, aes.CreateEncryptor(), CryptoStreamMode.Write))
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            swEncrypt.Write(errorResponse);
-                        }
-                        encryptedErrorResponse = msEncrypt.ToArray();
-                    }
-                }
-
-                await stream.WriteAsync(encryptedErrorResponse, 0, encryptedErrorResponse.Length);
-                Console.WriteLine($"Sent error response: \"{errorResponse}\"");
             }
         }
+    }
 
+    public class Message
+    {
+        public string Author { get; set; }
+        public string Body { get; set; }
+
+        public Message(string author, string body)
+        {
+            Author = author;
+            Body = body;
+        }
     }
 }
