@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Height="600"
         Width="920"
+        ResizeMode="NoResize"
         Title="Real Time Chat">
     <Grid Background="#323233">
         <Border CornerRadius="10" 
@@ -14,7 +15,7 @@
         BorderBrush="Gray" 
         BorderThickness="0"
         Height="35" 
-        Margin="230,0,25,10" 
+        Margin="230,0,70,10" 
         VerticalAlignment="Bottom" 
         HorizontalAlignment="Stretch">
             <Grid >
@@ -41,6 +42,22 @@
                  KeyDown="ChatTextBox_KeyDown"
                  x:Name="ChatTextBox"/>
             </Grid>
+        </Border>
+        <Border Background="#5a42f5"
+        BorderThickness="0"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Bottom"
+        Margin="0,0,20,10"
+        CornerRadius="5">
+            <Button x:Name="SendButton"
+            Background="Transparent"
+            BorderThickness="0"
+            Foreground="White"
+            FontSize="14"
+            Click="SendButton_Click"
+            Padding="7">
+                <Image Source="C:\Users\Nymes\Documents\GitHub\ChatC-sharp\WPFApp\WpfApp1\images\arrow.png" Width="20" Height="20" Margin="0,0,0,0" RenderTransformOrigin="0.2,-0.017"/>
+            </Button>
         </Border>
         <Border Background="#1e1e1f" 
         BorderThickness="1" 
@@ -81,9 +98,21 @@
 
         <ScrollViewer x:Name="ChatListScrollViewer" VerticalScrollBarVisibility="Auto" Margin="20,60,720,20">
             <ItemsControl x:Name="ChatContainer">
+                <Border Background="#4287f5" 
+                        BorderThickness="0"
+                        Margin="0,0,0,0" 
+                        Width="auto"
+                        Height="20"
+                        CornerRadius="10">
+                    <Button x:Name="globalChat"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="🗨️ › Global Chat" 
+                            Click="globalChat_Click"/>
+                </Border>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="#1e1e1f" 
+                        <!-- <Border Background="#1e1e1f" 
                 CornerRadius="5" 
                 Margin="5" 
                 Padding="10">
@@ -95,7 +124,7 @@
                                 <TextBlock Text="{Binding Body}" 
                            Foreground="White"/>
                             </StackPanel>
-                        </Border>
+                        </Border> -->
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

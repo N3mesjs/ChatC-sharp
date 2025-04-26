@@ -83,15 +83,22 @@
                     Foreground="White"
                     BorderThickness="0" Click="SendForm_Click"/>
         </Border>
-        <Button x:Name="goToSignUp"
-                Background="Transparent" 
-                Content="Registrati" 
-                FontSize="15" 
-                FontWeight="Bold" 
-                Foreground="White"
-                BorderThickness="0" 
-                Click="GoToSignUp_Click"
-                Grid.Row="4"
-                Margin="0,10,0,0"/>
+        <Border CornerRadius="10" 
+        Background="Transparent" 
+        BorderBrush="Transparent"
+        BorderThickness="0"
+        Height="35"
+        Margin="150,10,150,0"
+        Grid.Row="4">
+            <Button x:Name="goToSignUp"
+            Background="Transparent" 
+            Content="Registrati" 
+            FontSize="15" 
+            FontWeight="Bold" 
+            Foreground="White"
+            BorderThickness="0" 
+            Click="GoToSignUp_Click"
+            Grid.Row="4" />
+        </Border>
     </Grid>
 </Window>

@@ -35,18 +35,18 @@ namespace WpfApp1
             MessagesContainer.ItemsSource = Messages;
 
             // Carica i messaggi iniziali dal server
-            LoadMessagesFromServer();
+            LoadGlobalMessagesFromServer();
 
             // Configura il timer per il polling
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(2); // Esegui ogni 2 secondi
-            timer.Tick += (s, e) => LoadMessagesFromServer();
+            timer.Tick += (s, e) => LoadGlobalMessagesFromServer();
             timer.Start();
         }
 
         private HashSet<string> _messageTracker = new HashSet<string>(); // Tiene traccia dei messaggi univoci
 
-        private async void LoadMessagesFromServer()
+        private async void LoadGlobalMessagesFromServer()
         {
             try
             {
@@ -209,6 +209,21 @@ namespace WpfApp1
                 AddMessage(_username, ChatTextBox.Text); // Usa _username come autore
                 ChatTextBox.Clear();
             }
+        }
+
+        private void globalChat_Click(object sender, RoutedEventArgs e)
+        {
+            LoadGlobalMessagesFromServer();
+        }
+
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(ChatTextBox.Text))
+            {
+                AddMessage(_username, ChatTextBox.Text); // Usa _username come autore
+                ChatTextBox.Clear();
+            }
+
         }
     }
 }

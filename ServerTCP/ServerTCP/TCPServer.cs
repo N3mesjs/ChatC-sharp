@@ -174,7 +174,7 @@ namespace ServerTCP
                     {
                         await firebaseClient
                             .Child("users")
-                            .PostAsync(new { Username = username, Password = password });
+                            .PostAsync(new { Username = username, Password = password, isAdmin = false });
 
                         response = "SUCCESS";
                         Console.WriteLine("User data saved to Firebase.");
@@ -252,15 +252,18 @@ namespace ServerTCP
     {
         public string Author { get; set; }
         public string Body { get; set; }
-        public bool IsLocal { get; set; } // Indica se il messaggio è stato inviato dal client locale
+        public bool IsLocal { get; set; }
+        public DateTime Timestamp { get; set; }
 
         public Message(string author, string body, bool isLocal = false)
         {
             Author = author;
             Body = body;
             IsLocal = isLocal;
+            Timestamp = DateTime.UtcNow;
         }
     }
+
 
 
 }
