@@ -36,6 +36,7 @@ namespace WpfApp1
 
             // Carica i messaggi iniziali dal server
             LoadGlobalMessagesFromServer();
+            MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
 
             // Configura il timer per il polling
             DispatcherTimer timer = new DispatcherTimer();
@@ -125,8 +126,6 @@ namespace WpfApp1
                                 Messages.Add(message);
                             }
                         }
-
-                        MessagesScrollViewer.ScrollToEnd(); // Scorri fino in fondo alla lista dei messaggi
                     }
                 }
             }
