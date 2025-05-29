@@ -22,7 +22,7 @@ namespace ServerTCP
             // Inizializza Firebase Admin SDK
             FirebaseApp.Create(new AppOptions
             {
-                Credential = GoogleCredential.FromFile("C:\\Users\\Nymes\\Documents\\GitHub\\ChatC-sharp\\ServerTCP\\ServerTCP\\choco-d86c6-firebase-adminsdk-282m1-b544bb3dee.json") // Sostituisci con il percorso del tuo file JSON
+                Credential = GoogleCredential.FromFile("C:\\Users\\Nymes\\Documents\\GitHub\\ChatC-sharp\\ServerTCP\\ServerTCP\\choco-d86c6-firebase-adminsdk-282m1-755597834b.json") // Sostituisci con il percorso del tuo file JSON
             });
 
             var ipEndPoint = new IPEndPoint(IPAddress.Any, 13);
