@@ -1,0 +1,2 @@
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\publish\win-x64\ServerTCP.pdb
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\publish\win-x64\ServerTCP.exe
