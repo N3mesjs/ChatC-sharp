@@ -195,7 +195,6 @@ C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\win-x64\hostfxr.dll
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\win-x64\hostpolicy.dll
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\win-x64\mscordaccore.dll
-C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\win-x64\mscordaccore_amd64_amd64_8.0.1525.16413.dll
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\win-x64\mscordbi.dll
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\win-x64\mscorrc.dll
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\win-x64\msquic.dll
@@ -211,3 +210,4 @@ C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Release\net8
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Release\net8.0\win-x64\ServerTCP.pdb
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Release\net8.0\win-x64\ServerTCP.genruntimeconfig.cache
 C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\obj\Release\net8.0\win-x64\ref\ServerTCP.dll
+C:\Users\Nymes\Documents\GitHub\ChatC-sharp\ServerTCP\ServerTCP\bin\Release\net8.0\win-x64\mscordaccore_amd64_amd64_8.0.1425.11118.dll
